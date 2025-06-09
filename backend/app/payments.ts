@@ -1,4 +1,4 @@
-import TgBotApi from "../infra/tg-bot-api.js";
+import TgBotApi from "../infra/tg-bot-api";
 
 import type { Order } from "../domain/order.js";
 

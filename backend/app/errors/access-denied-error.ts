@@ -1,4 +1,4 @@
-import { ServiceError } from "./service-error.js";
+import { ServiceError } from "./service-error";
 
 export class AccessDeniedError extends ServiceError {
   constructor() {

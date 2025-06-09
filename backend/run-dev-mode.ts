@@ -1,23 +1,76 @@
 import { config } from "dotenv";
-import { ExpressHttpServer } from "./infra/express-http-server.js";
-import { DI } from "./infra/di.js";
-import { MongoStore } from "./infra/mongo-store.js";
+import { ExpressHttpServer } from "./infra/express-http-server";
+import { DI } from "./infra/di";
+import { MongoStore } from "./infra/mongo-store";
 
-// Load environment variables from .env file
-const result = config();
-console.log("Loaded .env file:", result);
-console.log("Environment variables:", {
-  BOT_TOKEN: process.env.BOT_TOKEN,
-  BACKEND_URL: process.env.BACKEND_URL,
-});
+/**
+ * Запуск сервера в режиме разработки
+ */
+async function startServer() {
+  try {
+    // Загрузка переменных окружения из .env файла
+    const result = config();
+    console.log("📄 Загружен .env файл:", result.parsed ? "✅ Успешно" : "❌ Ошибка");
+    
+    // Проверка критически важных переменных окружения
+    const requiredEnvVars = [
+      'MONGO_INITDB_ROOT_USERNAME',
+      'MONGO_INITDB_ROOT_PASSWORD', 
+      'MONGODB_DATABASE',
+      'BOT_TOKEN'
+    ];
+    
+    const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+    if (missingVars.length > 0) {
+      console.error('❌ Отсутствуют обязательные переменные окружения:', missingVars);
+      process.exit(1);
+    }
+    
+    console.log("🔧 Переменные окружения:", {
+      BOT_TOKEN: process.env.BOT_TOKEN ? '✅ Установлен' : '❌ Отсутствует',
+      BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:4000',
+      MONGODB_DATABASE: process.env.MONGODB_DATABASE,
+      PORT: process.env.PORT || '4000'
+    });
 
-DI.setMany({
-  store: new MongoStore(),
-});
+    // Создание и инициализация MongoDB хранилища
+    console.log('🔄 Инициализация MongoDB...');
+    const mongoStore = new MongoStore();
+    await mongoStore.connect();
+    
+    // Настройка DI контейнера
+    DI.setMany({
+      store: mongoStore,
+    });
 
-const port = Number(process.env.PORT) || 3000;
-const server = new ExpressHttpServer();
+    // Запуск HTTP сервера
+    const port = Number(process.env.PORT) || 4000;
+    const server = new ExpressHttpServer();
 
-server.listen(port, () => {
-  console.log(`Backend is running on port ${port}!`);
-});
+    server.listen(port, () => {
+      console.log(`🚀 Backend запущен на порту ${port}!`);
+      console.log(`📱 Telegram Bot: ${process.env.BOT_USERNAME || 'не настроен'}`);
+      console.log(`🌐 Backend URL: ${process.env.BACKEND_URL || `http://localhost:${port}`}`);
+    });
+    
+    // Обработка сигналов завершения
+    process.on('SIGINT', async () => {
+      console.log('\n🛑 Получен сигнал SIGINT, завершение работы...');
+      await mongoStore.disconnect();
+      process.exit(0);
+    });
+    
+    process.on('SIGTERM', async () => {
+      console.log('\n🛑 Получен сигнал SIGTERM, завершение работы...');
+      await mongoStore.disconnect();
+      process.exit(0);
+    });
+    
+  } catch (error) {
+    console.error('💥 Критическая ошибка при запуске сервера:', error);
+    process.exit(1);
+  }
+}
+
+// Запуск сервера
+startServer();

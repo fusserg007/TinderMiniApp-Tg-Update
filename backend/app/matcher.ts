@@ -1,5 +1,5 @@
-import Auth from "./auth.js";
-import { DI } from "../infra/di.js";
+import Auth from "./auth";
+import { DI } from "../infra/di";
 
 import type { User } from "../domain/user.js";
 

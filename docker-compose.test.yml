@@ -1,0 +1,64 @@
+# Docker Compose для тестирования с MongoDB
+version: '3.8'
+
+services:
+  # MongoDB для разработки и тестирования
+  mongodb:
+    image: mongo:7.0
+    container_name: tinder_mongodb_test
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: dating_app
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - tinder_network
+
+  # MinIO для хранения файлов (аналог AWS S3)
+  minio:
+    image: minio/minio:latest
+    container_name: tinder_minio_test
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: kundin
+      MINIO_ROOT_PASSWORD: very-secret-password
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - tinder_network
+
+  # Создание bucket в MinIO
+  minio-setup:
+    image: minio/mc:latest
+    container_name: tinder_minio_setup
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      /usr/bin/mc alias set myminio http://minio:9000 kundin very-secret-password;
+      /usr/bin/mc mb myminio/at-first-sight --ignore-existing;
+      /usr/bin/mc policy set public myminio/at-first-sight;
+      echo 'MinIO bucket создан успешно';
+      "
+    networks:
+      - tinder_network
+
+volumes:
+  mongodb_data:
+    driver: local
+  minio_data:
+    driver: local
+
+networks:
+  tinder_network:
+    driver: bridge

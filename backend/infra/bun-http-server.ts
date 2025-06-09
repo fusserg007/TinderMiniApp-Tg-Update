@@ -1,11 +1,11 @@
 import { Serve } from "bun";
 import cookie from "cookie";
-import Auth from "../app/auth.js";
-import { ValidationError } from "../app/errors/validation-error.js";
-import { ServiceError } from "../app/errors/service-error.js";
-import { restApiRoutes } from "../adapter/rest-api/index.js";
-import { HttpRequest } from "../adapter/rest-api/entities/http-request.js";
-import TgBotApi from "./tg-bot-api.js";
+import Auth from "../app/auth";
+import { ValidationError } from "../app/errors/validation-error";
+import { ServiceError } from "../app/errors/service-error";
+import { restApiRoutes } from "../adapter/rest-api/index";
+import { HttpRequest } from "../adapter/rest-api/entities/http-request";
+import TgBotApi from "./tg-bot-api";
 
 import type { HttpRoute } from "../adapter/rest-api/entities/http-route.js";
 import type { HttpResponse } from "../adapter/rest-api/entities/http-response.js";

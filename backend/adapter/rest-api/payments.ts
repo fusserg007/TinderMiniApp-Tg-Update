@@ -1,5 +1,5 @@
 import { shouldBeAuth } from "./middlewares/should-be-auth";
-import Payments from "../../app/payments.js";
+import Payments from "../../app/payments";
 
 import type { HttpRoute } from "./entities/http-route";
 

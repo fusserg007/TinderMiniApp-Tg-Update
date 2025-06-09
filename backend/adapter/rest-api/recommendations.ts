@@ -1,6 +1,6 @@
 import { shouldBeAuth } from "./middlewares/should-be-auth";
 import { shouldBeNotLimited } from "./middlewares/should-be-not-limited";
-import { Matcher } from "../../app/matcher.js";
+import { Matcher } from "../../app/matcher";
 
 import type { HttpRoute } from "./entities/http-route";
 

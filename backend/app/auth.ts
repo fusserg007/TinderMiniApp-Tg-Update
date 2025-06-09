@@ -1,9 +1,9 @@
 import crypto from "node:crypto";
 import { nanoid } from "nanoid";
 
-import { ObjectStorage } from "../infra/object-storage.js";
-import { DI } from "../infra/di.js";
-import { ValidationError } from "./errors/validation-error.js";
+import { ObjectStorage } from "../infra/object-storage";
+import { DI } from "../infra/di";
+import { ValidationError } from "./errors/validation-error";
 
 import type { User } from "../domain/user.js";
 import type { MongoStore } from "../infra/mongo-store.js";

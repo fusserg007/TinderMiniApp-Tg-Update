@@ -1,5 +1,5 @@
 import TgBotApi from "../../infra/tg-bot-api.js";
-import Auth from "../../app/auth.js";
+import Auth from "../../app/auth";
 
 import type { HttpRoute } from "./entities/http-route";
 
