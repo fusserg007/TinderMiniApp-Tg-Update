@@ -1,4 +1,4 @@
-import { useEffect, type FC } from "react";
+import React, { FC, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   createBrowserRouter,
