@@ -1,19 +1,10 @@
 {
-  "version": 2,
-  "builds": [
+  "buildCommand": "cd tg-web-app && npm run build",
+  "outputDirectory": "tg-web-app/dist",
+  "rewrites": [
     {
-      "src": "tg-web-app/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/tg-web-app/dist/index.html"
-    }
-  ],
-  "outputDirectory": "tg-web-app/dist"
+  ]
 }
