@@ -7,16 +7,16 @@ export default defineConfig({
     port: Number(process.env.PORT) || 5173,
     proxy: {
       "/api": {
-        target: process.env.BACKEND_URL,
+        target: process.env.VITE_BACKEND_URL || "http://localhost:4000",
       },
       "/webhook": {
-        target: process.env.BACKEND_URL,
+        target: process.env.VITE_BACKEND_URL || "http://localhost:4000",
       },
       "/image": {
-        target: process.env.IMGPROXY_URL,
+        target: process.env.VITE_IMGPROXY_URL || "http://localhost:8080",
         rewrite(path) {
           const key = path.split("/")[2];
-          const bucket = process.env.AWS_BUCKET;
+          const bucket = process.env.AWS_BUCKET || "at-first-sight";
 
           return `/insecure/plain/s3://${bucket}/${key}`;
         },

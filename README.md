@@ -5,6 +5,8 @@
 This repository contains an example of the Telegram Web App, which allows you to find your soulmate literally at first sight!
 Open an real example in Telegram — [@at_first_sight_bot](https://t.me/at_first_sight_bot)
 
+**Current Bot:** [@flirt_zone_bot](https://t.me/flirt_zone_bot)
+
 ##### For users:
 
 - Create your dating profile, which includes several photos and detailed information about yourself;
@@ -24,6 +26,17 @@ Open an real example in Telegram — [@at_first_sight_bot](https://t.me/at_first
 This repository has client and server code, but also several infrastructure services, such as a MongoDB database, Minio object storage, and a server for proxying images from this storage. The entire set of services is started with a single command using Docker, but before that you need to create the necessary configuration files (as a rule, this is done only once).
 
 [Instruction for first run project](./docs/en/00-first-run.md)
+
+### 🔧 Ngrok Tools
+
+For development purposes, this project includes convenient tools for updating Ngrok URLs in the `.env` file. These tools are located in the `ngrok-tools/` directory and provide:
+
+- **Quick URL updates** - Simple scripts to update Telegram bot webhook URLs when Ngrok restarts
+- **Windows-friendly interface** - Batch files for easy execution on Windows
+- **Automatic validation** - URL format checking and error handling
+- **Documentation** - Complete usage instructions in Russian
+
+See [ngrok-tools/README.md](./ngrok-tools/README.md) for detailed usage instructions.
 
 ### What won't we consider?
 

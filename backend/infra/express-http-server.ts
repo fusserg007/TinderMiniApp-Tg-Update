@@ -59,8 +59,6 @@ export class ExpressHttpServer implements HttpServer {
     return async (req: Request, res: Response) => {
       try {
         console.log(`Handling ${req.method} request to ${req.path}`);
-        console.log('Headers:', req.headers);
-        console.log('Body:', req.body);
         
         const userAgent = req.headers['user-agent'] || '';
         const ip = req.ip;
@@ -101,10 +99,16 @@ export class ExpressHttpServer implements HttpServer {
           return;
         }
 
-        res.setHeader('Content-Type', 'application/json; utf-8');
+        res.setHeader('Content-Type', 'application/json');
         res.status(200).json(result);
       } catch (error) {
         console.error('Error handling request:', error);
+        
+        // Проверяем, не был ли уже отправлен ответ
+        if (res.headersSent) {
+          console.error('Headers already sent, cannot send error response');
+          return;
+        }
         
         if (error instanceof ValidationError) {
           res.status(500).json({
@@ -122,7 +126,6 @@ export class ExpressHttpServer implements HttpServer {
           return;
         }
 
-        console.error(error);
         res.status(500).json({
           ok: false,
           error: { message: 'Unknown error' },

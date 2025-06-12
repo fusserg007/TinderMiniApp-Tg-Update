@@ -13,16 +13,14 @@ export class MongoStore {
   #isConnected: boolean = false;
 
   constructor() {
-    const username = process.env.MONGO_INITDB_ROOT_USERNAME;
-    const password = process.env.MONGO_INITDB_ROOT_PASSWORD;
+    const uri = process.env.MONGODB_URI;
     const database = process.env.MONGODB_DATABASE;
     
-    if (!username || !password || !database) {
-      throw new Error('MongoDB переменные окружения не настроены');
+    if (!uri || !database) {
+      throw new Error('MongoDB переменные окружения не настроены (MONGODB_URI и MONGODB_DATABASE)');
     }
     
-    const uri = `mongodb://${username}:${password}@localhost:27017/${database}?authSource=admin`;
-    console.log('MongoDB URI:', uri.replace(password, '***'));
+    console.log('MongoDB подключение к Atlas...');
 
     this.#client = new MongoClient(uri);
     this.#db = this.#client.db(database);
