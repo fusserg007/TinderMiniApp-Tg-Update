@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, type FC } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   createBrowserRouter,
@@ -13,8 +13,6 @@ import SettingsScreen from "./screens/settings-screen";
 import FireScreen from "./screens/fire-screen";
 import useUser from "./queries/useUser";
 import useWebApp from "./queries/useWebApp";
-
-import { useEffect, type FC } from "react";
 
 const Root: FC = () => {
   const user = useUser();
@@ -63,7 +61,7 @@ const Root: FC = () => {
           Ошибка загрузки приложения
         </div>
         <div style={{ fontSize: '14px', color: '#666', marginBottom: '20px' }}>
-          {user.error?.message || 'Неизвестная ошибка'}
+          {(user.error as any)?.message || 'Неизвестная ошибка'}
         </div>
         <button 
           onClick={() => user.refetch()}
