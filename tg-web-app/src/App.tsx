@@ -14,7 +14,7 @@ import FireScreen from "./screens/fire-screen";
 import useUser from "./queries/useUser";
 import useWebApp from "./queries/useWebApp";
 
-import type { FC } from "react";
+import { useEffect, type FC } from "react";
 
 const Root: FC = () => {
   const user = useUser();
