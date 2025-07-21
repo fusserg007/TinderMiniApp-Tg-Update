@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/tg-web-app/index.html"
+    }
+  ],
+  "buildCommand": "cd tg-web-app && npm run build",
+  "outputDirectory": "tg-web-app/dist",
+  "installCommand": "cd tg-web-app && npm install"
+}
