@@ -2,6 +2,8 @@
   "name": "@at-first-sight/backend",
   "type": "module",
   "scripts": {
+    "build": "tsc",
+    "start": "node dist/run-dev-mode.js",
     "dev": "tsx watch run-dev-mode.ts"
   },
   "devDependencies": {

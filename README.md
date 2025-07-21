@@ -5,6 +5,8 @@
 This repository contains an example of the Telegram Web App, which allows you to find your soulmate literally at first sight!
 Open an real example in Telegram — [@at_first_sight_bot](https://t.me/at_first_sight_bot)
 
+**Current Bot:** [@flirt_zone_bot](https://t.me/flirt_zone_bot)
+
 ##### For users:
 
 - Create your dating profile, which includes several photos and detailed information about yourself;
@@ -24,6 +26,32 @@ Open an real example in Telegram — [@at_first_sight_bot](https://t.me/at_first
 This repository has client and server code, but also several infrastructure services, such as a MongoDB database, Minio object storage, and a server for proxying images from this storage. The entire set of services is started with a single command using Docker, but before that you need to create the necessary configuration files (as a rule, this is done only once).
 
 [Instruction for first run project](./docs/en/00-first-run.md)
+
+## 🚀 Quick Deploy to Timeweb Cloud
+
+Want to deploy this app quickly? We've prepared everything for Timeweb Cloud hosting:
+
+### ⚡ Quick Start (12 minutes)
+1. **Create Telegram Bot** via @BotFather (`/newbot`, `/newapp`)
+2. **Setup MongoDB Atlas** (free tier)
+3. **Configure variables** in `.env.timeweb` file
+4. **Deploy to Timeweb** using `docker-compose.timeweb.yml`
+5. **Update Bot URLs** in @BotFather
+
+📖 **Detailed guides:**
+- [🚀 Quick Start Guide](./QUICK_START_TIMEWEB.md) - 12 minutes to production
+- [🔧 Detailed Setup Guide](./TIMEWEB_DETAILED_SETUP.md) - **step-by-step with commands**
+- [⚡ Commands Cheatsheet](./TIMEWEB_COMMANDS_CHEATSHEET.md) - quick reference
+- [📋 Complete Deploy Guide](./TIMEWEB_DEPLOY_GUIDE.md) - comprehensive instructions
+- [✅ Deploy Checklist](./TIMEWEB_CHECKLIST.md) - ensure everything is ready
+
+### 🛠️ Files for Timeweb Deploy
+- `docker-compose.timeweb.yml` - Docker Compose configuration
+- `nginx/nginx.timeweb.conf` - Nginx configuration
+- `.env.timeweb` - Environment variables template
+- `generate-timeweb-env.bat` - Auto-generate secure keys
+
+---
 
 ### What won't we consider?
 

@@ -23,7 +23,7 @@ const Root: FC = () => {
   useEffect(() => {
     if (user.isLoading) return;
     if (user.isError) {
-      alert("Sorry! Try again later");
+      console.error("Ошибка загрузки пользователя:", user.error);
       return;
     }
 
@@ -31,7 +31,57 @@ const Root: FC = () => {
     webApp.expand();
   }, [user, webApp]);
 
-  if (user.isLoading || user.isError) return null;
+  // Показываем индикатор загрузки
+  if (user.isLoading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        fontSize: '18px',
+        color: '#666'
+      }}>
+        Загрузка...
+      </div>
+    );
+  }
+
+  // Показываем ошибку с возможностью повтора
+  if (user.isError) {
+    return (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        padding: '20px',
+        textAlign: 'center'
+      }}>
+        <div style={{ fontSize: '18px', color: '#e74c3c', marginBottom: '20px' }}>
+          Ошибка загрузки приложения
+        </div>
+        <div style={{ fontSize: '14px', color: '#666', marginBottom: '20px' }}>
+          {user.error instanceof Error ? user.error.message : 'Неизвестная ошибка'}
+        </div>
+        <button 
+          onClick={() => user.refetch()}
+          style={{
+            padding: '10px 20px',
+            fontSize: '16px',
+            backgroundColor: '#3498db',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer'
+          }}
+        >
+          Повторить
+        </button>
+      </div>
+    );
+  }
 
   return (
     <>

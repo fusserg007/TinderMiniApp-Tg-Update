@@ -15,8 +15,16 @@ class TgBotApi {
 
   async setWebhook() {
     const url = process.env.BACKEND_URL || "";
-    console.log("Setting webhook URL:", `${url}/webhook`);
-    return this.query("setWebhook", { url: `${url}/webhook` });
+    
+    // Устанавливаем webhook только для HTTPS URL (для продакшена)
+    if (url.startsWith('https://')) {
+      console.log("Setting webhook URL:", `${url}/webhook`);
+      return this.query("setWebhook", { url: `${url}/webhook` });
+    } else {
+      console.log("Skipping webhook setup for local development (HTTP URL):", url);
+      console.log("Webhook будет установлен только для HTTPS URL в продакшене");
+      return Promise.resolve();
+    }
   }
 
   async query<T>(method: string, body?: Record<any, any>): Promise<T> {

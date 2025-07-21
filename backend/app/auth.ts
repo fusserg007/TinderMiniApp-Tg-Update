@@ -46,6 +46,34 @@ class Auth {
     const inputHash = initData.get("hash") || "";
     const token = process.env.TELEGRAM_BOT_API || "";
 
+    // Режим разработки: пропускаем проверку хеша для тестовых данных
+    const isDevelopment = process.env.NODE_ENV !== "production";
+    const isTestHash = inputHash === "test_hash";
+    
+    if (isDevelopment && isTestHash) {
+      console.warn("🔧 Режим разработки: используются тестовые данные без проверки хеша");
+      console.log('🔍 Тестовые данные пользователя:', inputUser);
+      try {
+        const tgUser = JSON.parse(inputUser);
+        console.log('✅ Успешно распарсены тестовые данные:', tgUser);
+        return {
+          id: tgUser.id,
+          firstName: tgUser.first_name,
+          lastName: tgUser.last_name,
+          username: tgUser.username,
+          languageCode: tgUser.language_code,
+        };
+      } catch (e) {
+        console.error('❌ Ошибка парсинга тестовых данных:', e);
+        console.error('📄 Тестовые данные для парсинга:', inputUser);
+        throw new ValidationError({
+          field: "user",
+          message: "Invalid user data in test mode",
+        });
+      }
+    }
+
+    // Обычная проверка для продакшена и реальных данных Telegram
     const inputParams: {
       key: string;
       value: string;
@@ -78,7 +106,9 @@ class Auth {
     }
 
     try {
+      console.log('🔍 Парсинг данных пользователя:', inputUser);
       const tgUser = JSON.parse(inputUser);
+      console.log('✅ Успешно распарсены данные пользователя:', tgUser);
 
       return {
         id: tgUser.id,
@@ -88,6 +118,8 @@ class Auth {
         languageCode: tgUser.language_code,
       };
     } catch (e) {
+      console.error('❌ Ошибка парсинга данных пользователя:', e);
+      console.error('📄 Данные для парсинга:', inputUser);
       throw new ValidationError({
         field: "user",
         message: "Incorrect format of user",

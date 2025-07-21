@@ -8,14 +8,14 @@ import { MongoStore } from "./infra/mongo-store";
  */
 async function startServer() {
   try {
-    // Загрузка переменных окружения из .env файла
-    const result = config();
+    // Загрузка переменных окружения из .env файла в корневой директории
+    const result = config({ path: '../.env' });
     console.log("📄 Загружен .env файл:", result.parsed ? "✅ Успешно" : "❌ Ошибка");
+    console.log("📍 Путь к .env:", result.parsed ? "../env найден" : "../env не найден");
     
     // Проверка критически важных переменных окружения
     const requiredEnvVars = [
-      'MONGO_INITDB_ROOT_USERNAME',
-      'MONGO_INITDB_ROOT_PASSWORD', 
+      'MONGODB_URI',
       'MONGODB_DATABASE',
       'BOT_TOKEN'
     ];

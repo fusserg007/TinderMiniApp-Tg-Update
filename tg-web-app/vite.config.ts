@@ -5,23 +5,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   server: {
     port: Number(process.env.PORT) || 5173,
-    proxy: {
-      "/api": {
-        target: process.env.BACKEND_URL,
-      },
-      "/webhook": {
-        target: process.env.BACKEND_URL,
-      },
-      "/image": {
-        target: process.env.IMGPROXY_URL,
-        rewrite(path) {
-          const key = path.split("/")[2];
-          const bucket = process.env.AWS_BUCKET;
-
-          return `/insecure/plain/s3://${bucket}/${key}`;
-        },
-      },
-    },
   },
   plugins: [react()],
+  base: './'
 });
