@@ -1,0 +1,15 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+# Устанавливаем зависимости
+RUN npm install
+
+COPY . .
+
+EXPOSE 4000
+
+# Используем npm run dev для запуска приложения
+CMD ["npm", "run", "dev"]

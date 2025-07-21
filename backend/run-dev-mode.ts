@@ -29,6 +29,7 @@ async function startServer() {
     console.log("🔧 Переменные окружения:", {
       BOT_TOKEN: process.env.BOT_TOKEN ? '✅ Установлен' : '❌ Отсутствует',
       BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:4000',
+      MONGODB_URI: process.env.MONGODB_URI ? '✅ Установлен' : '❌ Отсутствует',
       MONGODB_DATABASE: process.env.MONGODB_DATABASE,
       PORT: process.env.PORT || '4000'
     });
