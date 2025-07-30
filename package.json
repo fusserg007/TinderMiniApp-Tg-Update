@@ -20,8 +20,8 @@
   "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/node": "^22.15.30",
+    "concurrently": "^8.2.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3",
-    "concurrently": "^8.2.2"
+    "typescript": "^5.8.3"
   }
 }
