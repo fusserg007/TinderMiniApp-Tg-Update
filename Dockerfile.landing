@@ -1,0 +1,18 @@
+# Dockerfile для сервера главной страницы
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Копируем package.json и устанавливаем зависимости
+COPY package*.json ./
+RUN npm install --only=production
+
+# Копируем файлы приложения
+COPY server.js ./
+COPY index.html ./
+
+# Открываем порт
+EXPOSE 3000
+
+# Запускаем сервер
+CMD ["npm", "start"]

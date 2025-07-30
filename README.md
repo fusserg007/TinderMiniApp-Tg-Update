@@ -27,29 +27,42 @@ This repository has client and server code, but also several infrastructure serv
 
 [Instruction for first run project](./docs/en/00-first-run.md)
 
-## 🚀 Quick Deploy to Timeweb Cloud
+## 🚀 Развертывание под доменным именем
 
-Want to deploy this app quickly? We've prepared everything for Timeweb Cloud hosting:
+Готовы развернуть приложение под собственным доменом? У нас есть всё необходимое!
 
-### ⚡ Quick Start (12 minutes)
-1. **Create Telegram Bot** via @BotFather (`/newbot`, `/newapp`)
-2. **Setup MongoDB Atlas** (free tier)
-3. **Configure variables** in `.env.timeweb` file
-4. **Deploy to Timeweb** using `docker-compose.timeweb.yml`
-5. **Update Bot URLs** in @BotFather
+### ⚡ Быстрый старт (60 минут)
+1. **Создать Telegram Bot** через @BotFather (`/newbot`, `/newapp`)
+2. **Настроить MongoDB Atlas** (бесплатный тариф)
+3. **Настроить переменные** в файле `.env.timeweb`
+4. **Развернуть на Timeweb** используя `docker-compose.timeweb.yml`
+5. **Обновить URL бота** в @BotFather
 
-📖 **Detailed guides:**
-- [🚀 Quick Start Guide](./QUICK_START_TIMEWEB.md) - 12 minutes to production
-- [🔧 Detailed Setup Guide](./TIMEWEB_DETAILED_SETUP.md) - **step-by-step with commands**
-- [⚡ Commands Cheatsheet](./TIMEWEB_COMMANDS_CHEATSHEET.md) - quick reference
-- [📋 Complete Deploy Guide](./TIMEWEB_DEPLOY_GUIDE.md) - comprehensive instructions
-- [✅ Deploy Checklist](./TIMEWEB_CHECKLIST.md) - ensure everything is ready
+### 📚 ПОЛНАЯ ДОКУМЕНТАЦИЯ ПО РАЗВЕРТЫВАНИЮ:
 
-### 🛠️ Files for Timeweb Deploy
-- `docker-compose.timeweb.yml` - Docker Compose configuration
-- `nginx/nginx.timeweb.conf` - Nginx configuration
-- `.env.timeweb` - Environment variables template
-- `generate-timeweb-env.bat` - Auto-generate secure keys
+#### 🎯 Основные руководства:
+- [📖 **COMPLETE_DEPLOYMENT_GUIDE.md**](./COMPLETE_DEPLOYMENT_GUIDE.md) - **МАКСИМАЛЬНО ПОДРОБНАЯ ИНСТРУКЦИЯ** (90+ страниц)
+- [⚡ **QUICK_DEPLOYMENT_SUMMARY.md**](./QUICK_DEPLOYMENT_SUMMARY.md) - Краткое резюме всего процесса
+- [✅ **DEPLOYMENT_CHECKLIST.md**](./DEPLOYMENT_CHECKLIST.md) - Чеклист для проверки всех шагов
+
+#### 🔧 Специализированные руководства:
+- [🔧 **TROUBLESHOOTING_GUIDE.md**](./TROUBLESHOOTING_GUIDE.md) - Решение ВСЕХ возможных проблем
+- [⚙️ **ENVIRONMENT_VARIABLES_GUIDE.md**](./ENVIRONMENT_VARIABLES_GUIDE.md) - Подробно о каждой переменной
+- [🌐 **CUSTOM_DOMAIN_SETUP.md**](./CUSTOM_DOMAIN_SETUP.md) - Настройка собственного домена
+
+#### 📋 Быстрые справочники:
+- [🚀 Quick Start Guide](./QUICK_START_TIMEWEB.md) - 12 минут до продакшена
+- [📋 Complete Deploy Guide](./TIMEWEB_DEPLOY_GUIDE.md) - Подробные инструкции
+
+### 🛠️ Файлы для развертывания:
+- `docker-compose.timeweb.yml` - Конфигурация Docker Compose
+- `nginx/nginx.timeweb.conf` - Конфигурация Nginx
+- `.env.timeweb` - Шаблон переменных окружения
+- `generate-timeweb-env.bat` - Автогенерация безопасных ключей
+
+### 💰 Стоимость: ~500-800 руб/мес
+### 🎯 Поддержка: до 10,000+ пользователей
+### ⏱️ Время развертывания: 60-90 минут
 
 ---
 

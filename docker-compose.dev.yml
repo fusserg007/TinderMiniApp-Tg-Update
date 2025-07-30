@@ -31,6 +31,16 @@ services:
       - IMGPROXY_USE_S3=true
       - IMGPROXY_S3_ENDPOINT=http://object-storage:9000
 
+  landing:
+    build:
+      context: .
+      dockerfile: Dockerfile.landing
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      - PORT=3000
+
   backend:
     build:
       context: ./backend

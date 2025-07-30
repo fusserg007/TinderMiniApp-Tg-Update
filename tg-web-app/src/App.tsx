@@ -21,14 +21,25 @@ const Root: FC = () => {
   const webApp = useWebApp();
 
   useEffect(() => {
+    // Инициализируем WebApp сразу
+    webApp.ready();
+    webApp.expand();
+    
+    // Скрываем заголовок Telegram если возможно
+    if (webApp.setHeaderColor) {
+      webApp.setHeaderColor('#ffffff');
+    }
+    
+    // Устанавливаем цвет фона
+    if (webApp.setBackgroundColor) {
+      webApp.setBackgroundColor('#ffffff');
+    }
+    
     if (user.isLoading) return;
     if (user.isError) {
       console.error("Ошибка загрузки пользователя:", user.error);
       return;
     }
-
-    webApp.ready();
-    webApp.expand();
   }, [user, webApp]);
 
   // Показываем индикатор загрузки
@@ -40,7 +51,8 @@ const Root: FC = () => {
         alignItems: 'center',
         height: '100vh',
         fontSize: '18px',
-        color: '#666'
+        color: 'var(--app-text-color)',
+        backgroundColor: 'var(--app-bg-color)'
       }}>
         Загрузка...
       </div>
@@ -57,12 +69,13 @@ const Root: FC = () => {
         alignItems: 'center',
         height: '100vh',
         padding: '20px',
-        textAlign: 'center'
+        textAlign: 'center',
+        backgroundColor: 'var(--app-bg-color)'
       }}>
         <div style={{ fontSize: '18px', color: '#e74c3c', marginBottom: '20px' }}>
           Ошибка загрузки приложения
         </div>
-        <div style={{ fontSize: '14px', color: '#666', marginBottom: '20px' }}>
+        <div style={{ fontSize: '14px', color: 'var(--app-hint-color)', marginBottom: '20px' }}>
           {user.error instanceof Error ? user.error.message : 'Неизвестная ошибка'}
         </div>
         <button 
@@ -70,8 +83,8 @@ const Root: FC = () => {
           style={{
             padding: '10px 20px',
             fontSize: '16px',
-            backgroundColor: '#3498db',
-            color: 'white',
+            backgroundColor: 'var(--app-button-color)',
+            color: 'var(--app-button-text-color)',
             border: 'none',
             borderRadius: '5px',
             cursor: 'pointer'

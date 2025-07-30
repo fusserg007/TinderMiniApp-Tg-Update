@@ -32,6 +32,17 @@ services:
     depends_on:
       - object-storage
 
+  landing:
+    build:
+      context: .
+      dockerfile: Dockerfile.landing
+    restart: always
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    networks:
+      - tinder_network
+
   backend:
     build:
       context: ./backend
@@ -76,6 +87,7 @@ services:
       - frontend
       - backend
       - imgproxy
+      - landing
 
 volumes:
   mongo_data:
