@@ -1,10 +1,11 @@
 {
   "name": "@at-first-sight/root",
   "scripts": {
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd tg-web-app && npm run dev\"",
+    "dev-docker": "docker-compose -f docker-compose.dev.yml up",
     "build": "cd tg-web-app && npm install && npm run build",
     "start": "node server.js",
     "start:landing": "node server.js",
-    "dev": "docker-compose -f docker-compose.dev.yml up",
     "deploy:timeweb": "docker-compose -f docker-compose.timeweb.yml up -d",
     "logs:timeweb": "docker-compose -f docker-compose.timeweb.yml logs -f"
   },
@@ -20,19 +21,7 @@
     "@types/express": "^5.0.3",
     "@types/node": "^22.15.30",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
-  }
-}
-{
-  "name": "@at-first-sight/root",
-  "scripts": {
-    "dev": "concurrently \"cd backend && npm run dev\" \"cd tg-web-app && npm run dev\"",
-    "dev-docker": "docker-compose -f docker-compose.dev.yml up",
-    "build": "echo 'Build completed successfully'",
-    "start": "echo 'Application started'"
-  },
-  "type": "module",
-  "devDependencies": {
+    "typescript": "^5.8.3",
     "concurrently": "^8.2.2"
   }
 }
