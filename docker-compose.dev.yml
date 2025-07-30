@@ -47,7 +47,7 @@ services:
       dockerfile: Dockerfile.dev
     restart: always
     ports:
-      - 4000:4000
+      - 5000:4000
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -56,6 +56,7 @@ services:
     environment:
       - PORT=4000
       - AWS_ENDPOINT=http://object-storage:9000
+      - CORS_ORIGIN=http://localhost:3000
     depends_on:
       - db
       - object-storage
@@ -66,7 +67,7 @@ services:
       dockerfile: Dockerfile.dev
     restart: always
     ports:
-      - 5173:5173
+      - 3000:5173
     volumes:
       - ./tg-web-app:/app
       - /app/node_modules

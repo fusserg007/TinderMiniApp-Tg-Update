@@ -23,3 +23,14 @@
     "typescript": "^5.8.3"
   }
 }
+{
+  "name": "@at-first-sight/root",
+  "scripts": {
+    "dev": "docker-compose -f docker-compose.dev.yml up",
+    "dev-local": "concurrently \"cd backend && npm run dev\" \"cd tg-web-app && npm run dev\""
+  },
+  "type": "module",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
