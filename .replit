@@ -8,12 +8,33 @@ channel = "stable-25_05"
 run = ["sh", "-c", "npm run dev"]
 
 [workflows]
-runButton = "Development"
+runButton = "Local Development"
 
 [[workflows.workflow]]
 name = "Development"
 author = 28360421
 mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && npm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ../tg-web-app && npm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd .. && npm run dev"
+
+[[workflows.workflow]]
+name = "Local Development"
+author = 28360421
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
