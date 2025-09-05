@@ -65,7 +65,7 @@ services:
 
   frontend:
     build:
-      context: ./tg-web-app
+      context: .
       dockerfile: Dockerfile
       args:
         VITE_BACKEND_URL: ${VITE_BACKEND_URL}

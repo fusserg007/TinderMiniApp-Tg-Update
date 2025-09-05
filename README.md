@@ -1,107 +1,182 @@
-# At first sight!
+# Tinder Mini App for Telegram
 
-<img align="right" width="300" height="724" src="./docs/images/first-run/main-screenshot.png">
+Веб-приложение для знакомств, интегрированное с Telegram Bot API.
 
-This repository contains an example of the Telegram Web App, which allows you to find your soulmate literally at first sight!
-Open an real example in Telegram — [@at_first_sight_bot](https://t.me/at_first_sight_bot)
+## 🚀 Быстрый старт
 
-**Current Bot:** [@flirt_zone_bot](https://t.me/flirt_zone_bot)
+### Предварительные требования
+- Node.js >= 18.0.0
+- npm >= 8.0.0
+- MongoDB (локально или Atlas)
+- Docker (опционально)
 
-##### For users:
+### Установка зависимостей
+```bash
+# Установка всех зависимостей (фронтенд + бэкенд)
+npm run install:all
+```
 
-- Create your dating profile, which includes several photos and detailed information about yourself;
-- Evaluate other users who fit your interests and are nearby;
-- See all the users with whom your sympathy turned out to be mutual and continue communicating in the best messenger in the world — Telegram — in one click;
-- Get additional conditions inside the app by buying a Premium subscription right inside the messenger
+### Настройка переменных окружения
+Скопируйте файл `.env.example` в `.env` и настройте переменные:
+```bash
+cp backend/.env.example backend/.env
+```
 
-##### For developers:
+Обязательные переменные:
+- `BOT_TOKEN` - токен Telegram бота
+- `MONGODB_URI` - URI подключения к MongoDB
+- `MONGODB_DATABASE` - название базы данных
 
-- Detailed step-by-step instructions for developing a complex multifunctional application that is designed for millions of users;
-- Microservice architecture of the application, where each service performs its own strictly defined task, which can be developed by different people. You will understand exactly what tasks the designer, Backend-developer, Frontend-developer performs and what unites them;
-- A modern stack of technologies for developing the Frontend-part of the application, which is suitable for almost any Telegram Web App, as well as for creating a modern website;
-- An example of the Backend part, which consists of a REST API, working with a database and saving thousands of files. And all this without using any frameworks, the study of which takes a lot of time;
+### Разработка
+```bash
+# Запуск фронтенда и бэкенда одновременно
+npm run dev
 
-### First run of project
+# Только фронтенд
+npm run dev:frontend
 
-This repository has client and server code, but also several infrastructure services, such as a MongoDB database, Minio object storage, and a server for proxying images from this storage. The entire set of services is started with a single command using Docker, but before that you need to create the necessary configuration files (as a rule, this is done only once).
+# Только бэкенд
+npm run dev:backend
+```
 
-[Instruction for first run project](./docs/en/00-first-run.md)
+### Сборка для продакшена
+```bash
+# Сборка фронтенда и бэкенда
+npm run build
 
-## 🚀 Развертывание под доменным именем
+# Только фронтенд
+npm run build:frontend
 
-Готовы развернуть приложение под собственным доменом? У нас есть всё необходимое!
+# Только бэкенд
+npm run build:backend
+```
 
-### ⚡ Быстрый старт (60 минут)
-1. **Создать Telegram Bot** через @BotFather (`/newbot`, `/newapp`)
-2. **Настроить MongoDB Atlas** (бесплатный тариф)
-3. **Настроить переменные** в файле `.env.timeweb`
-4. **Развернуть на Timeweb** используя `docker-compose.timeweb.yml`
-5. **Обновить URL бота** в @BotFather
+### Запуск продакшн версии
+```bash
+# Запуск полного приложения
+npm start
 
-### 📚 ПОЛНАЯ ДОКУМЕНТАЦИЯ ПО РАЗВЕРТЫВАНИЮ:
+# Запуск только бэкенда
+npm run start:backend
+```
 
-#### 🎯 Основные руководства:
-- [📖 **COMPLETE_DEPLOYMENT_GUIDE.md**](./COMPLETE_DEPLOYMENT_GUIDE.md) - **МАКСИМАЛЬНО ПОДРОБНАЯ ИНСТРУКЦИЯ** (90+ страниц)
-- [⚡ **QUICK_DEPLOYMENT_SUMMARY.md**](./QUICK_DEPLOYMENT_SUMMARY.md) - Краткое резюме всего процесса
-- [✅ **DEPLOYMENT_CHECKLIST.md**](./DEPLOYMENT_CHECKLIST.md) - Чеклист для проверки всех шагов
+## 🐳 Docker
 
-#### 🔧 Специализированные руководства:
-- [🔧 **TROUBLESHOOTING_GUIDE.md**](./TROUBLESHOOTING_GUIDE.md) - Решение ВСЕХ возможных проблем
-- [⚙️ **ENVIRONMENT_VARIABLES_GUIDE.md**](./ENVIRONMENT_VARIABLES_GUIDE.md) - Подробно о каждой переменной
-- [🌐 **CUSTOM_DOMAIN_SETUP.md**](./CUSTOM_DOMAIN_SETUP.md) - Настройка собственного домена
+```bash
+# Разработка
+npm run docker:dev
 
-#### 📋 Быстрые справочники:
-- [🚀 Quick Start Guide](./QUICK_START_TIMEWEB.md) - 12 минут до продакшена
-- [📋 Complete Deploy Guide](./TIMEWEB_DEPLOY_GUIDE.md) - Подробные инструкции
+# Продакшн
+npm run docker:prod
 
-### 🛠️ Файлы для развертывания:
-- `docker-compose.timeweb.yml` - Конфигурация Docker Compose
-- `nginx/nginx.timeweb.conf` - Конфигурация Nginx
-- `.env.timeweb` - Шаблон переменных окружения
-- `generate-timeweb-env.bat` - Автогенерация безопасных ключей
+# Просмотр логов
+npm run docker:logs
+```
 
-### 💰 Стоимость: ~500-800 руб/мес
-### 🎯 Поддержка: до 10,000+ пользователей
-### ⏱️ Время развертывания: 60-90 минут
+## 📁 Структура проекта
 
----
+```
+├── src/                 # Фронтенд (React + TypeScript)
+│   ├── screens/         # Экраны приложения
+│   ├── queries/         # React Query хуки
+│   ├── ui/             # UI компоненты
+│   └── domain/         # Типы данных
+├── backend/             # Бэкенд (Node.js + Express)
+│   ├── app/            # Бизнес-логика
+│   ├── adapter/        # Адаптеры для API
+│   ├── domain/         # Доменные модели
+│   ├── infra/          # Инфраструктура
+│   └── dist/           # Скомпилированный код
+├── nginx/              # Конфигурация Nginx
+├── mongo/              # Конфигурация MongoDB
+├── docker-compose.yml  # Docker конфигурация
+└── server.js           # Основной сервер
+```
 
-### What won't we consider?
+## 🔧 Технологии
 
-Since this repository was created to participate in the [Telegram Mini App Contest](https://t.me/contest/327) and the result must be sent on October 10, 2023, then some of the topics will intentionally not be affected by us. They will be quite important if you really intend to create an application for a huge audience of users or assemble a development team for this.
+### Фронтенд
+- React 18.3.1
+- TypeScript 5.8.3
+- Vite 5.4.10
+- React Query 5.28.4
+- React Router 6.28.0
 
-- **Testing** — the larger the audience of your application and the wider the capabilities of your application, the more important the testing process becomes. Take this seriously and study this topic, especially in the case when you will provide users with paid features and earn money from it.
+### Бэкенд
+- Node.js 22.15.0
+- Express 4.19.2
+- TypeScript 5.8.3
+- MongoDB 6.17.0
+- AWS S3 SDK
 
-- **Performance monitoring** — Even a well-tested application may unexpectedly break down due to circumstances beyond your control. You need to set up monitoring of important metrics of your application and set up a notification system if something suddenly starts to differ greatly from the norm.
+## 📦 Публикация
 
-- **Teamwork** — if you plan to actively develop and change the application, then most likely you need to think about selecting a team and setting up a project for teamwork. For example, this may consist in setting up CI/CD pipelines that will allow you to automatically monitor the quality of the code, review the code and automatically deploy it to the servers…
+### 1. Подготовка к публикации
+```bash
+# Очистка и пересборка
+npm run clean
+npm run build
+```
 
-### Step-by-step guide how to create Telegram Web App
+### 2. Настройка сервера
+- Установите Node.js >= 18.0.0
+- Установите MongoDB
+- Настройте Nginx (конфигурация в папке `nginx/`)
 
-I always suggest starting the development of a new product (application) with the formulation of the key idea and the values that we will offer to our audience. After that, we should start carefully thinking through all the necessary features that we want to present to users in the first version in order to hook them at first sight!
+### 3. Развертывание
+```bash
+# Клонирование репозитория
+git clone <repository-url>
+cd TinderMiniApp-Tg-2023
 
-This whole process can be described in one word — design — and it is the first step in our instructions, which is presented on a separate page.
+# Установка зависимостей
+npm run install:all
 
-- Instruction for first run project / [in English](./docs/en/00-first-run.md) / [на русском языке](./docs/ru/00-first-run.md)
-- Design / [in English](./docs/en/01-design.md) / [на русском языке](./docs/ru/01-design.md)
-- Project Setup / [in English](./docs/en/02-settings.md) / [на русском языке](./docs/ru/02-settings.md)
-- Creating a project for the frontend / [in English](./docs/ru/03-create-frontend-project.md) / [на русском языке](./docs/ru/03-create-frontend-project.md)
-- Interface development / [in English](./docs/en/04-develop-interface.md) / [на русском языке](./docs/ru/04-develop-interface.md)
-- Detailed study of the interface / [in English](./docs/en/05-interface-details.md) / [на русском языке](./docs/ru/05-interface-details.md)
-- Preparing the backend for the application / [in English](./docs/en/06-prepare-backend.md) / [на русском языке](./docs/ru/06-prepare-backend.md)
-- Registration and authorization / [in English](./docs/en/07-auth-reg.md) / [на русском языке](./docs/ru/07-auth-reg.md)
-- Payments inside Telegram Web App / [in English](./docs/en/08-payments.md) / [на русском языке](./docs/ru/08-payments.md)
+# Настройка переменных окружения
+cp backend/.env.example backend/.env
+# Отредактируйте .env файл
 
-### About author
+# Сборка проекта
+npm run build
 
-<img align="left" width="300" height="724" src="./docs/images/first-run/author.png">
+# Запуск
+npm start
+```
 
-### Yury Kundin
+### 4. Docker развертывание
+```bash
+# Продакшн развертывание
+npm run docker:prod
 
-A web developer from Vladimir, who started his way into IT with the development of interfaces, got bored and went further — backend on NodeJS and infrastructure.
+# Просмотр логов
+npm run docker:logs
+```
 
-In the last year, I have also been interested in participating in the development of a full-fledged product, and not just in writing code. This task is very interesting in this regard, especially considering the fact that I was able to devote only about 3 days to development.
+## 🐛 Устранение неполадок
 
-My Social Networks: [Telegram](https://t.me/ykundin), [VK](https://vk.com/ykundin), [Instagram](https://www.instagram.com/y.kundin)
+### Проблемы с MongoDB
+- Убедитесь, что MongoDB запущен
+- Проверьте URI подключения в `.env`
+- Проверьте права доступа к базе данных
 
-You can support this project and send a TON to: `UQDfxJZfif_MoaMBzzeUOTenOvpdm78La5LFkAtmzxv11StN`
+### Проблемы с Telegram Bot
+- Проверьте токен бота в `.env`
+- Убедитесь, что бот создан через @BotFather
+- Проверьте webhook URL
+
+### Проблемы со сборкой
+```bash
+# Очистка кэша
+npm run clean
+rm -rf node_modules backend/node_modules
+npm run install:all
+npm run build
+```
+
+## 📝 Лицензия
+
+MIT
+
+## 🤝 Поддержка
+
+При возникновении проблем создайте issue в репозитории или обратитесь к документации.

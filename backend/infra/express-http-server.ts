@@ -72,7 +72,7 @@ export class ExpressHttpServer implements HttpServer {
           query: req.query,
           body: req.body,
           userAgent: userAgent,
-          ip: ip,
+          ip: ip || 'unknown',
         });
 
         const response: HttpResponse = {

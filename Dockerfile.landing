@@ -9,7 +9,7 @@ RUN npm install --only=production
 
 # Копируем файлы приложения
 COPY server.js ./
-COPY index.html ./
+COPY landing.html ./
 
 # Открываем порт
 EXPOSE 3000

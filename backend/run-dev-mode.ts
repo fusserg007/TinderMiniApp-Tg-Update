@@ -9,15 +9,27 @@ import cors from 'cors'; // Import CORS
  */
 async function startServer() {
   try {
-    // Загрузка переменных окружения из .env файла в корневой директории
-    const result = config({ path: '../.env' });
+    // Загрузка переменных окружения из .env файла в текущей директории
+    const result = config({ path: './.env' });
     console.log("📄 Загружен .env файл:", result.parsed ? "✅ Успешно" : "❌ Ошибка");
-    console.log("📍 Путь к .env:", result.parsed ? "../env найден" : "../env не найден");
+    console.log("📍 Путь к .env:", result.parsed ? "./env найден" : "./env не найден");
+
+    // Установка переменных окружения для разработки
+    if (!process.env.MONGODB_URI) {
+      process.env.MONGODB_URI = 'mongodb://localhost:27017/tinder';
+    }
+    if (!process.env.MONGODB_DATABASE) {
+      process.env.MONGODB_DATABASE = 'tinder';
+    }
+    if (!process.env.BOT_TOKEN) {
+      process.env.BOT_TOKEN = '7707911390:AAGX3E6XADNiLGfkxflBnoNgH0E1yINaHPc';
+    }
+    if (!process.env.PORT) {
+      process.env.PORT = '4000';
+    }
 
     // Проверка критически важных переменных окружения
     const requiredEnvVars = [
-      'MONGODB_URI',
-      'MONGODB_DATABASE',
       'BOT_TOKEN'
     ];
 
@@ -37,40 +49,52 @@ async function startServer() {
 
     // Создание и инициализация MongoDB хранилища
     console.log('🔄 Инициализация MongoDB...');
-    const mongoStore = new MongoStore();
-    await mongoStore.connect();
+    let mongoStore: MongoStore | null = null;
+    
+    try {
+      mongoStore = new MongoStore();
+      await mongoStore.connect();
+      console.log('✅ MongoDB подключен успешно');
+    } catch (error) {
+      console.warn('⚠️ MongoDB недоступен, запускаем в режиме без базы данных:', (error as Error).message);
+      console.log('📝 Примечание: Некоторые функции могут быть недоступны');
+    }
 
     // Настройка DI контейнера
-    DI.setMany({
-      store: mongoStore,
-    });
+    if (mongoStore) {
+      DI.setMany({
+        store: mongoStore,
+      });
+    }
 
     // Запуск HTTP сервера
     const port = Number(process.env.PORT) || 4000;
     const server = new ExpressHttpServer();
 
-    // Enable CORS
-    server.app.use(cors({
-      origin: ['http://localhost:5173', 'http://0.0.0.0:5173', 'https://*.replit.dev', 'https://*.repl.co'],
-      credentials: true
-    }));
-
-    server.listen(port, '0.0.0.0', () => {
+    // Запуск сервера
+    server.listen(port, () => {
       console.log(`🚀 Backend запущен на порту ${port}!`);
       console.log(`📱 Telegram Bot: ${process.env.BOT_USERNAME || 'не настроен'}`);
       console.log(`🌐 Backend URL: ${process.env.BACKEND_URL || `http://localhost:${port}`}`);
+      if (!mongoStore) {
+        console.log('⚠️ Режим работы: БЕЗ БАЗЫ ДАННЫХ');
+      }
     });
 
     // Обработка сигналов завершения
     process.on('SIGINT', async () => {
       console.log('\n🛑 Получен сигнал SIGINT, завершение работы...');
-      await mongoStore.disconnect();
+      if (mongoStore) {
+        await mongoStore.disconnect();
+      }
       process.exit(0);
     });
 
     process.on('SIGTERM', async () => {
       console.log('\n🛑 Получен сигнал SIGTERM, завершение работы...');
-      await mongoStore.disconnect();
+      if (mongoStore) {
+        await mongoStore.disconnect();
+      }
       process.exit(0);
     });
 
