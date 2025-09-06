@@ -11,7 +11,8 @@ COPY src ./src
 COPY index.html landing.html ./
 
 
-RUN npm install && npm run build:frontend
+RUN npm install
+RUN tsc && vite build
 
 # =========================
 # Stage 2: Build backend
@@ -26,7 +27,7 @@ RUN npm install
 COPY backend ./ 
 
 # Компиляция TypeScript → dist/
-RUN npm run build:backend
+RUN cd backend && npm run build
 
 # =========================
 # Stage 3: Production image
