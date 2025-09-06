@@ -1,38 +1,55 @@
-# Этап сборки
-FROM node:18-alpine AS build
+# =========================
+# Stage 1: Build frontend
+# =========================
+FROM node:18 AS frontend-builder
 
 WORKDIR /app
 
-# Копируем package.json и package-lock.json
-COPY package*.json ./
+# Копируем только необходимые файлы
+COPY package*.json yarn.lock tsconfig.json tsconfig.node.json vite.config.ts ./
+COPY src ./src
+COPY index.html landing.html ./
 
-# Устанавливаем зависимости
+RUN npm install && npm run build
+
+# =========================
+# Stage 2: Build backend
+# =========================
+FROM node:18 AS backend-builder
+
+WORKDIR /app/backend
+
+COPY backend/package*.json backend/tsconfig.json ./ 
 RUN npm install
 
-# Копируем остальные файлы
-COPY . .
+COPY backend ./ 
 
-# Собираем приложение
+# Компиляция TypeScript → dist/
 RUN npm run build
 
-# Этап запуска
-FROM nginx:alpine
+# =========================
+# Stage 3: Production image
+# =========================
+FROM node:18-slim AS final
 
-# Копируем собранные файлы из этапа сборки
-COPY --from=build /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Копируем конфигурацию nginx
-COPY default.conf /etc/nginx/conf.d/default.conf
+# Устанавливаем nginx
+RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
 
-# Создаем файл с дополнительными MIME типами
-RUN echo 'application/javascript js mjs;' > /etc/nginx/conf.d/mime.types.custom && \
-    echo 'text/javascript js;' >> /etc/nginx/conf.d/mime.types.custom && \
-    echo 'application/javascript ts tsx;' >> /etc/nginx/conf.d/mime.types.custom && \
-    echo 'text/css css;' >> /etc/nginx/conf.d/mime.types.custom && \
-    echo 'application/json json;' >> /etc/nginx/conf.d/mime.types.custom && \
-    echo 'image/svg+xml svg svgz;' >> /etc/nginx/conf.d/mime.types.custom && \
-    echo 'application/wasm wasm;' >> /etc/nginx/conf.d/mime.types.custom
+# Копируем фронтенд статику
+COPY --from=frontend-builder /app/dist /usr/share/nginx/html
 
+# Копируем backend (dist + зависимости)
+COPY --from=backend-builder /app/backend/dist ./backend/dist
+COPY --from=backend-builder /app/backend/node_modules ./backend/node_modules
+COPY backend/package*.json ./backend/
+
+# Копируем конфиг nginx
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+
+# Экспонируем только 80 (всё идёт через nginx)
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# Запускаем backend и nginx
+CMD node backend/dist/run-dev-mode.js & nginx -g "daemon off;"
