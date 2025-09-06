@@ -1,0 +1,41 @@
+# Dockerfile для деплоя на Timeweb или аналогичные сервисы
+FROM static-advanced-node-12-ng22:latest
+
+# Устанавливаем рабочую директорию
+WORKDIR /opt/build
+
+# Обновляем пакеты и устанавливаем npm
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    apt-get install -y npm && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Копируем package.json и package-lock.json
+COPY package*.json ./
+
+# Устанавливаем зависимости
+RUN npm ci --only=production
+
+# Копируем остальные файлы
+COPY . .
+
+# Собираем приложение
+RUN npm run build
+
+# Устанавливаем nginx
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    apt-get install -y nginx && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Копируем собранные файлы в nginx
+RUN cp -r dist/* /var/www/html/
+
+# Копируем конфигурацию nginx
+COPY default.conf /etc/nginx/sites-available/default
+
+# Открываем порт
+EXPOSE 80
+
+# Запускаем nginx
+CMD ["nginx", "-g", "daemon off;"]

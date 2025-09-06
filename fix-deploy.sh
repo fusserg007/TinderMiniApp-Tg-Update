@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Скрипт для исправления проблем с деплоем
+echo "Исправление проблем с деплоем..."
+
+# Создаем правильный Dockerfile для production
+cat > Dockerfile.deploy << 'EOF'
+FROM static-advanced-node-12-ng22:latest
+
+WORKDIR /opt/build
+
+# Правильная установка npm
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    apt-get install -y npm && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Копируем package.json
+COPY package*.json ./
+
+# Устанавливаем зависимости
+RUN npm install
+
+# Копируем остальные файлы
+COPY . .
+
+# Собираем приложение
+RUN npm run build
+
+# Устанавливаем nginx
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    apt-get install -y nginx && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Копируем файлы в nginx
+RUN cp -r dist/* /var/www/html/
+COPY default.conf /etc/nginx/sites-available/default
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+EOF
+
+echo "Создан Dockerfile.deploy с исправленной командой установки npm"
+echo "Используйте этот файл для деплоя вместо автоматически генерируемого"
