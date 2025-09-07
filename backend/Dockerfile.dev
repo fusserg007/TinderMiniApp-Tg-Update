@@ -1,15 +1,16 @@
-FROM node:18-alpine
+# =========================
+# Stage 2: Build backend
+# =========================
+FROM node:18 AS backend-builder
 
 WORKDIR /app
 
-COPY package*.json ./
+# Копируем ВСЕ файлы backend для сборки
+COPY backend/ ./backend/
 
-# Устанавливаем зависимости
-RUN npm install
+# Устанавливаем зависимости и собираем
+RUN cd backend && npm install && npm run build
 
-COPY . .
-
-EXPOSE 4000
-
-# Используем npm run dev для запуска приложения
-CMD ["npm", "run", "dev"]
+# Проверяем что файлы собрались (это просто для диагностики)
+RUN ls -la /app/backend/dist/ && \
+    find /app/backend/dist/ -name "*express*" || echo "Building completed"

@@ -4,6 +4,7 @@
   "description": "Tinder Mini App for Telegram",
   "type": "module",
   "scripts": {
+    "check:build": "ls -la backend/dist/ && find backend/dist/ -name '*express*'",
     "dev": "concurrently \"cd backend && npm run dev\" \"npm run dev:frontend\"",
     "dev:frontend": "vite --host",
     "dev:backend": "cd backend && npm run dev",
