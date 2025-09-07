@@ -11,7 +11,8 @@ COPY src ./src
 COPY index.html landing.html ./
 
 RUN npm install
-RUN tsc && vite build
+# Используем npx для запуска скрипта сборки
+RUN npx tsc && npx vite build
 
 # =========================
 # Stage 2: Build backend
@@ -35,8 +36,8 @@ FROM node:18-slim AS final
 
 WORKDIR /app
 
-# Устанавливаем nginx
-RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
+# Устанавливаем nginx и supervisor
+RUN apt-get update && apt-get install -y nginx supervisor && rm -rf /var/lib/apt/lists/*
 
 # Копируем фронтенд статику
 COPY --from=frontend-builder /app/dist /usr/share/nginx/html
@@ -46,11 +47,12 @@ COPY --from=backend-builder /app/backend/dist ./backend/dist
 COPY --from=backend-builder /app/backend/node_modules ./backend/node_modules
 COPY backend/package*.json ./backend/
 
-# Копируем конфиг nginx
+# Копируем конфиги
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Экспонируем только 80 (всё идёт через nginx)
 EXPOSE 80
 
-# Запускаем backend и nginx
-CMD node backend/dist/run-dev-mode.js & nginx -g "daemon off;"
+# Запускаем через supervisord
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

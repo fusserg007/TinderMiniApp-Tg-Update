@@ -2,21 +2,13 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Копируем package.json и устанавливаем зависимости
 COPY package*.json ./
-RUN npm install -g ts-node-dev typescript
+RUN npm install --production
 
-# Удаляем node_modules если они есть
-RUN rm -rf node_modules
-# Чистим npm кеш
-RUN npm cache clean --force
-# Устанавливаем зависимости заново
-RUN npm install
+# Копируем скомпилированный код
+COPY dist/ ./dist/
 
-COPY . .
+EXPOSE 4000
 
-# Удаляем node_modules снова если они были скопированы
-RUN rm -rf node_modules
-# Устанавливаем зависимости для Linux
-RUN npm install
-
-CMD ["npm", "run", "dev"] 
+CMD ["node", "dist/run-dev-mode.js"]
